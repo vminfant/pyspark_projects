@@ -1,2 +1,2 @@
-# pyspark_projects
+# Pyspark Projects
 Repository for PySpark Projects and Code snippets
