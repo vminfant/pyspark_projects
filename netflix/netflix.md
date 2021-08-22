@@ -1,4 +1,4 @@
-# Transform netflix data set
+# Transform - netflix TV Show/Movie data set
 
 ## Source
 
@@ -9,28 +9,28 @@
 ## Cleansing rules
 
 * Remove duplicates based on `show id`.
-<<<<<<< HEAD
 * Drop the programs/shows that are not `type` _TV Show_ or _Movie_.
-=======
-* Drop the programs/shows that are not type `TV Show` or `Movie`.
->>>>>>> 01d778d4d8c7fe72e535e006e06b4d61d5f151d4
-* Remove newline characters(\n) from `title` and `description`.
+* Remove newline characters(\n) from the below fields.
+  * `title`
+  * `description`
+  * `directors`
+  * `actors`
 
 ## Transformation rules
 
-### TV Show
-
-* Add a column as to indicate it if it season or program.
-
-### Movie
-
-* Convert the `duration` into seconds.
+* Convert the `duration` into seconds if the `type` is _Movie_.
+* Produce `duration` as `null` if the `type` is _TV Show_.
+* Convert `date_added` into YYYY-MM-DD format.
+* Add a column to produce the total number of seasons for TV Shows.
+  * Column name should be `no_of_seasons`.
+  * Produce `no_of_seasons` as `null` if the 'type` is _Movie_
+* Split the `directors` and `actors` into individual rows to perform analytics 
+related to actors and directors  
 
 ## Output
 
-* Create two different output files based on type.
+* Create an output file(s) and use `type` to partition the data.
 
-| type          | Output File Delimiter  | Output File Format  | Output File Naming Convention |
-| ------------- |:----------------------:|:-------------------:|:-----------------------------:|
-| Movie         | Comma (,)              | CSV                 | netflix_movies_yyyymmdd.csv
-| TV Show       | Comma (,)              | CSV                 | netflix_tv_shows_yyyymmdd.csv
+| Partition column | Output File Format      |
+| ---------------- |:-----------------------:|
+| `type`           | parquet                 |
