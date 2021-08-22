@@ -130,6 +130,9 @@ dmypy.json
 
 # User data
 data/
+<<<<<<< HEAD
 
 # VSCode configs
 .vscode/
+=======
+>>>>>>> 01d778d4d8c7fe72e535e006e06b4d61d5f151d4

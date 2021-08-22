@@ -9,7 +9,11 @@
 ## Cleansing rules
 
 * Remove duplicates based on `show id`.
+<<<<<<< HEAD
 * Drop the programs/shows that are not `type` _TV Show_ or _Movie_.
+=======
+* Drop the programs/shows that are not type `TV Show` or `Movie`.
+>>>>>>> 01d778d4d8c7fe72e535e006e06b4d61d5f151d4
 * Remove newline characters(\n) from `title` and `description`.
 
 ## Transformation rules
