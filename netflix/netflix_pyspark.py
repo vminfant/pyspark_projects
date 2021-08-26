@@ -15,13 +15,21 @@ TITLES_SCHEMA = ("show_id STRING,type STRING,title STRING,director STRING,cast S
 def cleanse_df(spark, inp_df):
     """Apply cleansing rules to the input data frame."""
     # Remove duplicates based on show_id.
-    res_df = inp_df.drop_duplicates(['show_id']).
+    res_df = inp_df.drop_duplicates(['show_id'])
 
     # Only select TV Show and Movie
     res_df = res_df[(res_df['type'] == 'TV Show') | (res_df['type'] == 'Movie')]
 
-    # Remove new line charactors,
+    # Remove new line charactors
     res_df = res_df.replace("\n","",subset=['title','description'])
+
+    return res_df
+
+
+def transform_df(spark, res_df):
+    """Apply transformation rules to the cleansed data frame."""
+    # Convert `date_added` into YYYY-MM-DD format.
+    res_df = inp_df['date_added']
 
     return res_df
 
@@ -30,6 +38,9 @@ def process_df(spark, inp_df):
     """Process the input data frame and apply transformation rules."""
     # Apply cleansing rules.
     res_df = cleanse_df(spark, inp_df)
+
+    # Apply transformation rules.
+    res_df = cleanse_df(spark, res_df)
 
 def main():
     """Transform the netflix data set."""
