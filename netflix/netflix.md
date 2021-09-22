@@ -2,7 +2,7 @@
 
 ## Source
 
-| Source        | Link           |
+| Source        | Link          |
 | ------------- |:-------------:|
 | Kaggle        | [netflix-shows](https://www.kaggle.com/shivamb/netflix-shows) |
 
@@ -14,7 +14,7 @@
   * `title`
   * `description`
   * `directors`
-  * `actors`
+  * `cast`
 
 ## Transformation rules
 
@@ -24,8 +24,7 @@
 * Add a column to produce the total number of seasons for TV Shows.
   * Column name should be `no_of_seasons`.
   * Produce `no_of_seasons` as `null` if the 'type` is _Movie_
-* Split the `directors` and `actors` into individual rows to perform analytics 
-related to actors and directors  
+* Split the `directors` and `cast` into individual rows to perform analytics related to actors and directors  
 
 ## Output
 
