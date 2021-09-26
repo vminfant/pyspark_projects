@@ -21,15 +21,29 @@ def cleanse_df(spark, inp_df):
     res_df = res_df[(res_df['type'] == 'TV Show') | (res_df['type'] == 'Movie')]
 
     # Remove new line charactors
-    res_df = res_df.replace("\n","",subset=['title','description'])
+    res_df = res_df.replace("\n","",subset=['title', 'description', 'directors', 'cast'])
 
     return res_df
 
 
-def transform_df(spark, res_df):
+def transform_df(spark, inp_df):
     """Apply transformation rules to the cleansed data frame."""
-    # Convert `date_added` into YYYY-MM-DD format.
-    res_df = inp_df['date_added']
+    # Introduce a new column as no_of_seasons and produce the total season numbers & 
+    # change the existing column duration to 
+    spl_dur = split(df['duration'], " ")
+    res_df = inp_df.withColumn('no_of_seasons', when(res_df['type'] == 'TV Show', 
+                               spl_dur[0]).otherwise(NullType)).withColumn('duration',
+                               when(res_df['type'] == 'Movie', 
+                               (spl_dur[0]*60).astype("INT")).otherwise(NullType))
+
+    # Change the data type of the date_added column.
+    res_df = res_df.withColumn('date_added', to_date(inp_df['date_added'], "%M %D, %y"))
+
+    # Update the Data Frame and replace all the NA with "UNK"
+    res_df =  res_df.na.fill({"cast": "UNK", "director": "UNK"})
+
+    res_df = res_df.select("*",explode(split(res_df['cast'], ",")).alias("actors")).drop("cast")
+    res_df = res_df.select("*",explode(split(inp_df['director'], ",")).alias("director"))
 
     return res_df
 
@@ -41,6 +55,9 @@ def process_df(spark, inp_df):
 
     # Apply transformation rules.
     res_df = cleanse_df(spark, res_df)
+
+    # Write the records in Parquet format.
+    res_df.repartition(1).write.parquet("/tmp/test/", mode="overwrite")
 
 def main():
     """Transform the netflix data set."""
